@@ -1,5 +1,5 @@
 import test from 'ava'
-import <%= name %>Extender from './<%= name %>'
+import <%= name %>Filter from './<%= name %>'
 
 test('filters/<%= name %>', (t) => {
   t.pass()
