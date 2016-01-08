@@ -14,14 +14,13 @@ class Generator extends Base {
   }
 
   writing() {
-    const dir = `${this.config.get('contentBase')}web_modules/components/${this.name}`
+    const dir = this._getDir()
     const name = this.name
     const capitalizedName = (() => name[0].toUpperCase() + name.substring(1))()
 
     this.fs.copyTpl(
       this.templatePath('index.js'),
-      this.destinationPath(
-        `${dir}/index.js`),
+      this.destinationPath(`${dir}/index.js`),
       {
         name
       }
@@ -29,8 +28,7 @@ class Generator extends Base {
 
     this.fs.copyTpl(
       this.templatePath('component.html'),
-      this.destinationPath(
-        `${dir}/${name}.html`),
+      this.destinationPath(`${dir}/${name}.html`),
       {
         name
       }
@@ -41,8 +39,7 @@ class Generator extends Base {
 
       this.fs.copyTpl(
         this.templatePath('component.js'),
-        this.destinationPath(
-          `${dir}/${name}.js`),
+        this.destinationPath(`${dir}/${name}.js`),
         {
           capitalizedName
         }
@@ -50,8 +47,7 @@ class Generator extends Base {
 
       this.fs.copyTpl(
         this.templatePath('component.test.js'),
-        this.destinationPath(
-          `${dir}/${name}.test.js`),
+        this.destinationPath(`${dir}/${name}.test.js`),
         {
           name,
           capitalizedName
@@ -74,7 +70,7 @@ class Generator extends Base {
   }
 
   _addPropToComponentRegistration(k, v) {
-    const indexFile = this.destinationPath(`${this.config.get('contentBase')}web_modules/components/${this.name}/index.js`)
+    const indexFile = this.destinationPath(`${this._getDir()}/index.js`)
     const tree = ast(this.fs.read(indexFile))
 
     tree
@@ -85,6 +81,10 @@ class Generator extends Base {
         .value(v)
 
     this.fs.write(this.destinationPath(indexFile), tree.toString())
+  }
+
+  _getDir() {
+    return `${this.config.get('contentBase')}web_modules/components/${this.name}`
   }
 }
 
