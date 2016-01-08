@@ -160,12 +160,13 @@ class Generator extends Base {
         })
     }
 
-    const tree = ast(this.fs.read(this.destinationPath('webpack.config.js')))
+    const webpackConfigFile = this.destinationPath('webpack.config.js')
+    const tree = ast(this.fs.read(webpackConfigFile))
     tree
       .assignment('module.exports').value()
         .key('entry')
           .key(this.appName).value(`'./${this.config.get('contentBase')}${appDir}app.js'`)
-    this.fs.write(this.destinationPath('webpack.config.js'), tree.toString())
+    this.fs.write(webpackConfigFile, tree.toString())
 
     this.fs.copyTpl(
       this.templatePath('index.html'),
@@ -185,6 +186,16 @@ class Generator extends Base {
       this.templatePath('app.js'),
       this.destinationPath(`${this.config.get('contentBase')}${appDir}app.js`)
     )
+  }
+
+  conflicts() {
+    // I really didn't want to have to do this... but this stops the tests from
+    // breaking on account of merge conflicts in `routes.js`
+    if ((process.env.NODE_ENV || 'development').toLowerCase().indexOf('test') > -1) {
+      const _preserve = this.conflicter.adapter.prompt
+      this.conflicter.adapter.prompt = (foo, confirm) => confirm({ action: 'force' })
+      this.conflicter.adapter.prompt.restoreDefaultPrompts = () => this.conflicter.adapter.prompt = _preserve
+    }
   }
 
   install() {
