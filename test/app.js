@@ -3,7 +3,7 @@ import assert from 'yeoman-assert'
 
 import { runGenerator } from '../utils/test-utils'
 
-test('generator-ko-spa:app single-entry', async (t) => { // eslint-disable-line
+test('generator-ko-spa:app single-entry', async (t) => {
   await runGenerator('app')
 
   assert
@@ -30,7 +30,7 @@ test('generator-ko-spa:app single-entry', async (t) => { // eslint-disable-line
     ])
 })
 
-test('generator-ko-spa:app multi-entry (via args)', async (t) => { // eslint-disable-line
+test('generator-ko-spa:app multi-entry (via args)', async (t) => {
   await runGenerator('app', ['foo'])
 
   assert
@@ -47,7 +47,7 @@ test('generator-ko-spa:app multi-entry (via args)', async (t) => { // eslint-dis
     ])
 })
 
-test('generator-ko-spa:app multi-entry (via prompt)', async (t) => { // eslint-disable-line
+test('generator-ko-spa:app multi-entry (via prompt)', async (t) => {
   await runGenerator('app', null, { multiEntry: true, appName: 'foo' })
 
   assert

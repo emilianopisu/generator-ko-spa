@@ -3,7 +3,7 @@ import assert from 'yeoman-assert'
 
 import { runGenerator } from '../utils/test-utils'
 
-test('generator-ko-spa:binding', async (t) => { // eslint-disable-line
+test('generator-ko-spa:binding', async (t) => { 
   await runGenerator('binding', ['foo'])
 
   assert

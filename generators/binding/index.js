@@ -1,4 +1,4 @@
-'use strict' // eslint-disable-line
+'use strict'
 
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')

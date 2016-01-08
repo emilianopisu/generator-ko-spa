@@ -1,4 +1,4 @@
-'use strict' // eslint-disable-line
+'use strict'
 
 const _ = require('lodash')
 const co = require('co')
@@ -212,6 +212,7 @@ class Generator extends Base {
     this.npmInstall([
       'ava',
       'babel-core',
+      'babel-eslint',
       'babel-loader',
       'babel-plugin-transform-runtime',
       'babel-preset-es2015',
