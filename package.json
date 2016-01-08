@@ -1,0 +1,48 @@
+{
+  "name": "generator-ko-spa",
+  "version": "0.0.0",
+  "description": "> KnockoutJS Single-Page App Yeoman Generator",
+  "author": "Casey Webb <notcaseywebb@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "yeoman-generator",
+    "yeoman",
+    "yo",
+    "knockoutjs",
+    "knockout",
+    "ko",
+    "generator",
+    "spa"
+  ],
+  "homepage": "https://github.com/caseywebb/generator-ko-spa#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseywebb/generator-ko-spa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/caseywebb/generator-ko-spa/issues"
+  },
+  "scripts": {
+    "test": "nyc --reporter=lcov --reporter=html ava --verbose --serial"
+  },
+  "dependencies": {
+    "ast-query": "^1.1.0",
+    "chalk": "^1.1.1",
+    "co": "^4.6.0",
+    "generator-git-init": "^1.0.4",
+    "generator-npm-init": "^1.2.0",
+    "generator-packagejson": "^0.9.1",
+    "lodash": "^3.10.1",
+    "yeoman-generator": "^0.22.2",
+    "yosay": "^1.1.0"
+  },
+  "devDependencies": {
+    "ava": "^0.9.1",
+    "babel-eslint": "^4.1.6",
+    "codeclimate-test-reporter": "^0.1.1",
+    "eslint": "^1.10.3",
+    "nyc": "^5.3.0",
+    "yeoman-assert": "^2.0.0",
+    "yeoman-test": "^1.0.0"
+  }
+}
