@@ -15,6 +15,7 @@ test('generator-ko-spa:binding', async (t) => { // eslint-disable-line
 
   assert
     .fileContent([
-      ['client/web_modules/bindings/foo/index.js', 'ko.bindingHandlers.foo']
+      ['client/web_modules/bindings/foo/index.js', 'ko.bindingHandlers.foo'],
+      ['client/web_modules/bindings/foo/foo.test.js', 'test(\'bindings/foo\'']
     ])
 })

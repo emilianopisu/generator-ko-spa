@@ -1,6 +1,6 @@
 import test from 'ava'
-import { init, update } from './<%= bindingName %>'
+import { init, update } from './<%= name %>'
 
-test('bindings/<%= bindingName %>', (t) => {
+test('bindings/<%= name %>', (t) => {
   t.pass()
 })
