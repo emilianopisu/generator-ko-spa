@@ -1,6 +1,7 @@
 # generator-ko-spa
-
 > Scaffold KnockoutJS SPAs with up to 50% less pain.
+
+
 ![NPM](https://img.shields.io/npm/v/generator-ko-spa.svg)
 ![MIT](https://img.shields.io/npm/l/generator-ko-spa.svg)
 [![Travis](https://img.shields.io/travis/caseyWebb/generator-ko-spa.svg)](https://travis-ci.org/caseyWebb/generator-ko-spa)
