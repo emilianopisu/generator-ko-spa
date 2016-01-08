@@ -21,7 +21,6 @@
     "prefer-const": 2,
     "quotes": [2, "single"],
     "semi": [2, "never"],
-    "space-before-function-paren": [2, "never"],
-    "strict": [2, "global"]
+    "space-before-function-paren": [2, "never"]
   }
 }

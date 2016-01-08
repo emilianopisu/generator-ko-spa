@@ -2,4 +2,4 @@
 
 const ko = require('knockout')
 
-ko.bindingHandlers.<%= bindingName %> = require('./<%= bindingName %>')
+ko.bindingHandlers.<%= name %> = require('./<%= name %>')

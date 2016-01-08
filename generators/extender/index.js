@@ -1,4 +1,4 @@
-'use strict' // eslint-disable-line
+'use strict'
 
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')
@@ -10,17 +10,17 @@ class Generator extends Base {
   }
 
   writing() {
-    const dir = `${this.config.get('contentBase')}web_modules/bindings/${this.name}`
+    const dir = `${this.config.get('contentBase')}web_modules/extenders/${this.name}`
     const name = this.name
 
     this.fs.copy(
-      this.templatePath('binding.js'),
+      this.templatePath('extender.js'),
       this.destinationPath(
         `${dir}/${name}.js`)
     )
 
     this.fs.copyTpl(
-      this.templatePath('binding.test.js'),
+      this.templatePath('extender.test.js'),
       this.destinationPath(
         `${dir}/${name}.test.js`),
       {
@@ -42,7 +42,7 @@ class Generator extends Base {
     this.log(yosay(`
       Don't forget!
       You have to call
-      require('bindings/${this.name}')
+      require('extenders/${this.name}')
       before it's available to use
     `))
   }
