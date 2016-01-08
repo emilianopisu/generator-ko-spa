@@ -22,6 +22,7 @@ test('generator-ko-spa:app single-entry', async (t) => { // eslint-disable-line
   assert
     .fileContent([
       ['client/index.html', '<script src="/dist/app.js"></script>'],
+      ['package.json', '"test": "nyc --reporter=lcov --reporter=html ava --verbose **/*.test.js"'],
       ['webpack.config.js', 'contentBase: \'client/\''],
       ['webpack.config.js', 'path: \'client/dist\''],
       ['webpack.config.js', 'publicPath: \'/dist/\''],
@@ -61,4 +62,10 @@ test('generator-ko-spa:app multi-entry (via prompt)', async (t) => { // eslint-d
       ['client/foo/index.html', '<script src="/dist/foo.js"></script>'],
       ['webpack.config.js', 'foo: \'./client/foo/app.js\'']
     ])
+})
+
+test('generator-ko-spa:app single-entry (repeated)', (t) => {
+  runGenerator('app', null, null, null, { multiEntry: false })
+    .then(() => t.fail())
+    .catch(() => t.pass())
 })

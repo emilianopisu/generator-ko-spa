@@ -13,28 +13,46 @@ class Generator extends Base {
   }
 
   initializing() {
+    const hasPkgJson = this.fs.exists(this.destinationPath('package.json'))
+    const hasWebpackConfig = this.fs.exists(this.destinationPath('webpack.config.js'))
+
     if (!this.fs.exists(this.destinationPath('.git/HEAD'))) {
       this.composeWith('git-init', {}, {
         local: require.resolve('generator-git-init/generators/app')
       })
     }
+    if (!hasWebpackConfig) {
+      this.composeWith('npm-init', {
+        options: {
+          'skip-name': hasPkgJson,
+          'skip-version': hasPkgJson,
+          'skip-description': hasPkgJson,
+          'skip-repo': hasPkgJson,
+          'skip-keywords': hasPkgJson,
+          'skip-author': hasPkgJson,
+          'skip-license': hasPkgJson,
 
-    const hasPkgJson = this.fs.exists(this.destinationPath('package.json'))
-    this.composeWith('npm-init', {
-      options: {
-        'skip-name': hasPkgJson,
-        'skip-version': hasPkgJson,
-        'skip-description': hasPkgJson,
-        'skip-repo': hasPkgJson,
-        'skip-keywords': hasPkgJson,
-        'skip-author': hasPkgJson,
-        'skip-license': hasPkgJson,
+          'skip-test': true,
+          'skip-main': true,
 
-        'skip-test': true,
-        'skip-main': true
-      }
-    }, {
-      local: require.resolve('generator-npm-init/app')
+          test: 'nyc --reporter=lcov --reporter=html ava --verbose **/*.test.js'
+        }
+      }, {
+        local: require.resolve('generator-npm-init/app')
+      })
+    }
+
+    if (this.config.get('multiEntry') === false) {
+      throw new Error(`
+        This project wasn\'t set-up for multiple entry points;
+        you'll have to do some manual tweaking.
+      `)
+    }
+
+    this.config.defaults({
+      contentBase: 'client/',
+      path: 'client/dist',
+      publicPath: '/dist/'
     })
   }
 
@@ -72,12 +90,7 @@ class Generator extends Base {
       }
 
       if (this.appName) {
-        if (this.config.get('multiEntry') === false) {
-          throw new Error(`
-            This project wasn\'t set-up for multiple entry points;
-            you'll have to manually tweak the appropriate files.
-          `)
-        } else {
+        if (this.config.get('multiEntry') !== false) {
           this.config.set('multiEntry', true)
         }
       } else if (typeof this.config.get('multiEntry') === 'undefined') {
@@ -125,7 +138,6 @@ class Generator extends Base {
 
     _.merge(pkg, {
       scripts: {
-        'test': 'ava **/*.test.js',
         'build': 'webpack',
         'build:prod': 'webpack -p',
         'watch': 'webpack --watch',
@@ -187,6 +199,7 @@ class Generator extends Base {
     })
 
     this.npmInstall([
+      'ava',
       'babel-core',
       'babel-loader',
       'babel-plugin-transform-runtime',
@@ -199,9 +212,9 @@ class Generator extends Base {
       'image-webpack-loader',
       'ko-component-router',
       'node-sass',
+      'nyc',
       'sass-loader',
       'style-loader',
-      'tape',
       'url-loader',
       'webpack',
       'webpack-dev-server'
