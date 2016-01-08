@@ -23,7 +23,7 @@
     "url": "https://github.com/caseywebb/generator-ko-spa/issues"
   },
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=html ava --verbose --serial"
+    "test": "export NODE_ENV=test; nyc --reporter=lcov --reporter=html ava --verbose --serial"
   },
   "dependencies": {
     "ast-query": "^1.1.0",

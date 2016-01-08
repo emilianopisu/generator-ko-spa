@@ -3,8 +3,29 @@ import assert from 'yeoman-assert'
 
 import { runGenerator } from '../utils/test-utils'
 
-test('generator-ko-spa:component', async () => {
+test('generator-ko-spa:component (via args)', async () => {
   await runGenerator('component', ['foo'])
+
+  assert
+    .file([
+      'client/web_modules/components/foo/index.js',
+      'client/web_modules/components/foo/foo.js',
+      'client/web_modules/components/foo/foo.html',
+      'client/web_modules/components/foo/foo.test.js'
+    ])
+
+  assert
+    .fileContent([
+      ['client/web_modules/components/foo/index.js', 'template: require(\'./foo.html\')'],
+      ['client/web_modules/components/foo/index.js', 'viewModel: require(\'./foo.js\')'],
+      ['client/web_modules/components/foo/foo.html', 'foo'],
+      ['client/web_modules/components/foo/foo.js', 'FooViewModel'],
+      ['client/web_modules/components/foo/foo.test.js', 'test(\'components/foo\'']
+    ])
+})
+
+test('generator-ko-spa:component (via prompts)', async () => {
+  await runGenerator('component', null, { name: 'foo' })
 
   assert
     .file([

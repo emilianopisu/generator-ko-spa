@@ -1,5 +1,6 @@
 'use strict'
 
+const co = require('co')
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')
 const ast = require('ast-query')
@@ -7,10 +8,25 @@ const ast = require('ast-query')
 class Generator extends Base {
   constructor() {
     super(...arguments)
-    this.argument('name', { required: true })
+
+    this.argument('name', { required: false })
 
     this.option('template-only')
     this.option('synchronous')
+  }
+
+  prompting() {
+    const done = this.async()
+
+    co(function* () {
+      if (!this.name) {
+        this.name = yield this._p({
+          type: 'input',
+          name: 'name',
+          message: 'name:'
+        })
+      }
+    }.bind(this)).then(done)
   }
 
   writing() {
@@ -85,6 +101,12 @@ class Generator extends Base {
 
   _getDir() {
     return `${this.config.get('contentBase')}web_modules/components/${this.name}`
+  }
+
+  _p(opts) {
+    return new Promise((resolve) => {
+      this.prompt(opts, (res) => resolve(res[opts.name]))
+    })
   }
 }
 
