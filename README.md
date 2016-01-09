@@ -26,7 +26,7 @@ $ npm run serve
 ## Generators
 
 #### app `[entry]`
-  Generates the basic app structure.
+> Generates the basic app structure.
 
   When optional `entry` parameter is supplied, multi entry points are enabled and
   the app will be created in a subdirectory.
@@ -36,51 +36,52 @@ $ npm run serve
 
 
 #### view `[entry] name route`
-  Generates a new view (component) with the given route.
+> Generates a new view (component) with the given route.
 
   If the project is using multiple entry points, entry will be required.
 
 #### binding `name`
-  Generates a new [binding](http://knockoutjs.com/documentation/custom-bindings.html).
+> Generates a new [binding](http://knockoutjs.com/documentation/custom-bindings.html).
 
 #### component `name`
-  Generates a new [component](http://knockoutjs.com/documentation/component-binding.html).
+> Generates a new [component](http://knockoutjs.com/documentation/component-binding.html).
 
 #### extender `name`
-  Generates a new [extender](http://knockoutjs.com/documentation/extenders.html).
+> Generates a new [extender](http://knockoutjs.com/documentation/extenders.html).
 
-##### filter `name`
-  Generates a new [knockout-punches](http://mbest.github.io/knockout.punches/#text-filters) filter.
+#### filter `name`
+> Generates a new [knockout-punches](http://mbest.github.io/knockout.punches/#text-filters) filter.
 
 #### util `name`
-  Generates a new utility.
+> Generates a new utility.
 
 ## Scripts
 
-These are all available via `npm run <cmd>`
+__USAGE:__
+`npm run <cmd>`
 
 #### build `webpack`
-  Builds the project
+> Builds the project
 
 #### build:prod `webpack -p`
-  Builds the project for production
+> Builds the project for production
 
 #### watch `webpack --watch`
-  Builds the project once and rebuilds on change.
+> Builds the project once and rebuilds on change.
 
 #### watch:prod
-  Same as watch, but with `-p`
+> Same as watch, but with `-p`
 
 #### serve
-  Serves app via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html) *(caution: webpack's docs suck. that's why this project exists.)*
+> Serves app via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html) *(caution: webpack's docs suck. that's why this project exists.)*
 
 #### serve:prod
-  Same as serve, but with `-p`
+> Same as serve, but with `-p`
   
   __Note:__ You wouldn't actually want to use this in production.
 
 #### test
-  Runs the tests.
+>Runs the tests.
 
 #### coverage
-  Runs the tests and generates code coverage.
+> Runs the tests and generates code coverage.
