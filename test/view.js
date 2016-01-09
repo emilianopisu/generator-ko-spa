@@ -75,7 +75,7 @@ test('generator-ko-spa:view (multi-entry via args)', async () => {
     ])
 })
 
-test('generator-ko-spa:view (multi-entry — but only one subapp — via args)', async () => {
+test('generator-ko-spa:view (multi-entry — but only one entry — via args)', async () => {
   const persistentDir = await runGenerator('app', ['qux'])
   await runGenerator('view', ['bar', '/foo/bar'], null, null, null, persistentDir)
 
@@ -102,7 +102,7 @@ test('generator-ko-spa:view (multi-entry via prompts)', async () => {
   const persistentDir = await runGenerator('app', ['baz'])
   await runGenerator('app', ['qux'], null, null, null, persistentDir)
   await runGenerator('view', null, {
-    subApp: 'qux',
+    entry: 'qux',
     name: 'bar',
     route: '/foo/bar'
   }, null, null, persistentDir)

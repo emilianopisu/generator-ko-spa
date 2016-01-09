@@ -11,14 +11,14 @@ class Generator extends Base {
   constructor() {
     super(...arguments)
 
-    this.subapps = (() => {
+    this.entries = (() => {
       const dist = this.destinationPath(this.config.get('contentBase'))
       return _.filter(fs.readdirSync(dist), (file) =>
         file !== 'web_modules' && fs.statSync(path.join(dist, file)).isDirectory())
     })()
 
-    if (this.config.get('multiEntry') && this.subapps.length > 1) {
-      this.argument('subApp', { required: false })
+    if (this.config.get('multiEntry') && this.entries.length > 1) {
+      this.argument('entry', { required: false })
     }
     this.argument('name', { required: false })
     this.argument('route', { required: false })
@@ -31,16 +31,16 @@ class Generator extends Base {
     const done = this.async()
 
     co(function* () {
-      if (this.config.get('multiEntry') && !this.subApp) {
-        if (this.subapps.length > 1) {
-          this.subApp = yield this._p({
+      if (this.config.get('multiEntry') && !this.entry) {
+        if (this.entries.length > 1) {
+          this.entry = yield this._p({
             type: 'list',
-            name: 'subApp',
+            name: 'entry',
             message: 'sub app:',
-            choices: this.subapps
+            choices: this.entries
           })
         } else {
-          this.subApp = this.subapps[0]
+          this.entry = this.entries[0]
         }
       }
 
@@ -81,7 +81,7 @@ class Generator extends Base {
       this.destinationPath(`${dir}/${name}.html`),
       {
         name,
-        appname: this.subApp ? this.subApp + '/' : ''
+        appname: this.entry ? this.entry + '/' : ''
       }
     )
 
@@ -109,7 +109,7 @@ class Generator extends Base {
         {
           name,
           capitalizedName,
-          appname: this.subApp ? this.subApp + '/' : ''
+          appname: this.entry ? this.entry + '/' : ''
         }
       )
     }
@@ -145,7 +145,7 @@ class Generator extends Base {
 
   _getAppDir() {
     const subdir = this.config.get('multiEntry')
-      ? this.subApp + '/'
+      ? this.entry + '/'
       : ''
     return this.config.get('contentBase') + subdir
   }

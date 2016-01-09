@@ -143,7 +143,8 @@ class Generator extends Base {
         'watch': 'webpack --watch',
         'watch:prod': 'webpack --watch -p',
         'serve': 'webpack-dev-server',
-        'serve:prod': 'webpack-dev-server -p'
+        'serve:prod': 'webpack-dev-server -p',
+        'coverage': 'karma start --coverage'
       }
     })
 
@@ -211,6 +212,7 @@ class Generator extends Base {
     this.npmInstall([
       'jquery',
       'knockout',
+      'knockout-fast-foreach',
       'knockout-punches',
       'ko-component-router',
       'lodash'
