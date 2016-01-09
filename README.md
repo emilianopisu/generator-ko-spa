@@ -23,9 +23,9 @@ $ yo ko-spa & yo ko-spa:view home /
 $ npm run serve
 ```
 
-### Generators
+## Generators
 
-##### app `[entry]`
+#### app `[entry]`
   Generates the basic app structure.
 
   When optional `entry` parameter is supplied, multi entry points are enabled and
@@ -34,52 +34,53 @@ $ npm run serve
   __This can only be done the first time the app generator is ran__, unless you
   want to go tweaking files later (which isn't difficult, but nice is avoided.)
 
-##### view `[entry] name route`
+
+#### view `[entry] name route`
   Generates a new view (component) with the given route.
 
   If the project is using multiple entry points, entry will be required.
 
-##### binding `name`
+#### binding `name`
   Generates a new [binding](http://knockoutjs.com/documentation/custom-bindings.html).
 
-##### component `name`
+#### component `name`
   Generates a new [component](http://knockoutjs.com/documentation/component-binding.html).
 
-##### extender `name`
+#### extender `name`
   Generates a new [extender](http://knockoutjs.com/documentation/extenders.html).
 
 ##### filter `name`
   Generates a new [knockout-punches](http://mbest.github.io/knockout.punches/#text-filters) filter.
 
-##### util `name`
+#### util `name`
   Generates a new utility.
 
-### Scripts
+## Scripts
 
 These are all available via `npm run <cmd>`
 
-##### build `webpack`
+#### build `webpack`
   Builds the project
 
-##### build:prod `webpack -p`
+#### build:prod `webpack -p`
   Builds the project for production
 
-##### watch `webpack --watch`
+#### watch `webpack --watch`
   Builds the project once and rebuilds on change.
 
-##### watch:prod
+#### watch:prod
   Same as watch, but with `-p`
 
-##### serve
+#### serve
   Serves app via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html) *(caution: webpack's docs suck. that's why this project exists.)*
 
-##### serve:prod
+#### serve:prod
   Same as serve, but with `-p`
   
   __Note:__ You wouldn't actually want to use this in production.
 
-##### test
+#### test
   Runs the tests.
 
-##### coverage
+#### coverage
   Runs the tests and generates code coverage.
