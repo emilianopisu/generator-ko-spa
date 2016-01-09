@@ -1,6 +1,9 @@
-import test from 'ava'
-import { init, update } from './<%= name %>'
+'use strict'
+
+const test = require('tape')
+const { init, update } = require('./<%= name %>')
 
 test('bindings/<%= name %>', (t) => {
+  t.plan(1)
   t.pass()
 })

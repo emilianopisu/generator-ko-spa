@@ -3,7 +3,7 @@ import assert from 'yeoman-assert'
 
 import { runGenerator } from '../utils/test-utils'
 
-test('generator-ko-spa:app single-entry', async (t) => {
+test('generator-ko-spa:app single-entry', async () => {
   await runGenerator('app')
 
   assert
@@ -22,7 +22,8 @@ test('generator-ko-spa:app single-entry', async (t) => {
   assert
     .fileContent([
       ['client/index.html', '<script src="/dist/app.js"></script>'],
-      ['package.json', '"test": "nyc --reporter=lcov --reporter=html ava --verbose **/*.test.js"'],
+      ['package.json', '"test": "karma start"'],
+      ['karma.conf.js', 'basePath: path.resolve(__dirname, \'client/\')'],
       ['webpack.config.js', 'contentBase: \'client/\''],
       ['webpack.config.js', 'path: \'client/dist\''],
       ['webpack.config.js', 'publicPath: \'/dist/\''],
@@ -30,7 +31,7 @@ test('generator-ko-spa:app single-entry', async (t) => {
     ])
 })
 
-test('generator-ko-spa:app multi-entry (via args)', async (t) => {
+test('generator-ko-spa:app multi-entry (via args)', async () => {
   await runGenerator('app', ['foo'])
 
   assert
@@ -47,7 +48,7 @@ test('generator-ko-spa:app multi-entry (via args)', async (t) => {
     ])
 })
 
-test('generator-ko-spa:app multi-entry (via prompt)', async (t) => {
+test('generator-ko-spa:app multi-entry (via prompt)', async () => {
   await runGenerator('app', null, { multiEntry: true, appName: 'foo' })
 
   assert

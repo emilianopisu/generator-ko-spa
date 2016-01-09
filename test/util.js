@@ -17,7 +17,7 @@ test('generator-ko-spa:util (via args)', async () => {
     .fileContent([
       ['client/web_modules/utils/foo/index.js', 'module.exports = require(\'./foo\')'],
       ['client/web_modules/utils/foo/foo.test.js', 'test(\'utils/foo\''],
-      ['client/web_modules/utils/foo/foo.test.js', 'import foo from \'./foo\'']
+      ['client/web_modules/utils/foo/foo.test.js', 'const foo = require(\'./foo\')']
     ])
 })
 
