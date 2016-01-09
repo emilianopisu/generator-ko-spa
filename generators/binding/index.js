@@ -1,12 +1,27 @@
 'use strict'
 
+const co = require('co')
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')
 
 class Generator extends Base {
   constructor() {
     super(...arguments)
-    this.argument('name', { required: true })
+    this.argument('name', { required: false })
+  }
+
+  prompting() {
+    const done = this.async()
+
+    co(function* () {
+      if (!this.name) {
+        this.name = yield this._p({
+          type: 'input',
+          name: 'name',
+          message: 'name:'
+        })
+      }
+    }.bind(this)).then(done)
   }
 
   writing() {
@@ -46,6 +61,8 @@ class Generator extends Base {
       before it's available to use
     `))
   }
+
+  _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
 }
 
 module.exports = Generator
