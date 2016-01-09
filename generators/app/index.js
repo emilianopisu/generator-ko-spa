@@ -35,7 +35,7 @@ class Generator extends Base {
           'skip-test': true,
           'skip-main': true,
 
-          test: 'nyc --reporter=lcov --reporter=html ava --verbose **/*.test.js'
+          'test': 'karma start'
         }
       }, {
         local: require.resolve('generator-npm-init/app')
@@ -160,6 +160,15 @@ class Generator extends Base {
         })
     }
 
+    if (!this.fs.exists(this.destinationPath('karma.conf.js'))) {
+      this.fs.copyTpl(
+        this.templatePath('karma.conf.js'),
+        this.destinationPath('karma.conf.js'),
+        {
+          contentBase: this.config.get('contentBase')
+        })
+    }
+
     const webpackConfigFile = this.destinationPath('webpack.config.js')
     const tree = ast(this.fs.read(webpackConfigFile))
     tree
@@ -210,9 +219,7 @@ class Generator extends Base {
     })
 
     this.npmInstall([
-      'ava',
       'babel-core',
-      'babel-eslint',
       'babel-loader',
       'babel-plugin-transform-runtime',
       'babel-preset-es2015',
@@ -222,24 +229,26 @@ class Generator extends Base {
       'file-loader',
       'html-loader',
       'image-webpack-loader',
+      'isparta-loader',
+      'karma',
+      'karma-coverage',
+      'karma-tap',
+      'karma-webpack',
       'ko-component-router',
       'node-sass',
-      'nyc',
       'sass-loader',
       'style-loader',
+      'tape',
       'url-loader',
       'webpack',
-      'webpack-dev-server'
+      'webpack-dev-server',
+      'yargs'
     ], {
       saveDev: true
     })
   }
 
-  _p(opts) {
-    return new Promise((resolve) => {
-      this.prompt(opts, (res) => resolve(res[opts.name]))
-    })
-  }
+  _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
 }
 
 module.exports = Generator

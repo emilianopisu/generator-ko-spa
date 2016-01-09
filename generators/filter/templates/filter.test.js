@@ -1,6 +1,7 @@
-import test from 'ava'
-import <%= name %>Filter from './<%= name %>'
+const test = require('tape')
+const <%= name %>Filter = require('./<%= name %>')
 
 test('filters/<%= name %>', (t) => {
+  t.plan(1)
   t.pass()
 })
