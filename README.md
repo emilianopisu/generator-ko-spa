@@ -49,7 +49,7 @@ $ npm run serve
 #### extender `name`
   Generates a new [extender](http://knockoutjs.com/documentation/extenders.html).
 
-##### filter `name`
+#### filter `name`
   Generates a new [knockout-punches](http://mbest.github.io/knockout.punches/#text-filters) filter.
 
 #### util `name`
