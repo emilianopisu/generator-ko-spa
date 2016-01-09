@@ -154,11 +154,7 @@ class Generator extends Base {
     return this._getAppDir() + this.name
   }
 
-  _p(opts) {
-    return new Promise((resolve) => {
-      this.prompt(opts, (res) => resolve(res[opts.name]))
-    })
-  }
+  _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
 }
 
 module.exports = Generator
