@@ -21,6 +21,7 @@ test('generator-ko-spa:app single-entry', async () => {
 
   assert
     .fileContent([
+      ['client/index.html', '<title>app</title>'],
       ['client/index.html', '<script src="/dist/app.js"></script>'],
       ['package.json', '"test": "karma start"'],
       ['karma.conf.js', 'basePath: path.resolve(__dirname, \'client/\')'],
@@ -60,6 +61,7 @@ test('generator-ko-spa:app multi-entry (via prompt)', async () => {
 
   assert
     .fileContent([
+      ['client/foo/index.html', '<title>foo</title>'],
       ['client/foo/index.html', '<script src="/dist/foo.js"></script>'],
       ['webpack.config.js', 'foo: \'./client/foo/app.js\'']
     ])
