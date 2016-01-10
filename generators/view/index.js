@@ -135,11 +135,8 @@ class Generator extends Base {
     const tree = ast(this.fs.read(indexFile), escodegenOpts)
 
     tree
-      .callExpression('module.exports')
-        .arguments
-        .at(1)
-        .key(k)
-        .value(v)
+      .assignment('module.exports').value()
+        .key(k).value(v)
 
     this.fs.write(this.destinationPath(indexFile), tree.toString())
   }

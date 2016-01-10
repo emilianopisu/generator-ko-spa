@@ -7,15 +7,19 @@ const routes = require('./routes')
 
 require('ko-component-router')
 require('knockout-punches')
+ko.punches.enableAll()
+
+require('knockout-fast-foreach')
+ko.bindingHandlers.foreach = ko.bindingHandlers.fastForEach
 
 ko.components.loaders.push({
   getConfig(name, done) {
     if (_(routes).values().contains(name)) {
       require.context(
-        'bundle?name=[1]&regExp=views/(.*)/index.js!./',
+        'bundle?name=[1]&regExp=<%= appDir %>/(.*)/index.js!./',
         true,
         /\/views\/[^\/]+\/index\.js$/
-      )(`./views/${name}/index.js`)(done)
+      )(`./${name}/index.js`)(done)
     } else {
       done(null)
     }

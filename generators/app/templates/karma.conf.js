@@ -20,10 +20,6 @@ module.exports = function(config) {
 
     autoWatch: true,
 
-    client: {
-      args: ['coverage']
-    },
-
     reporters: ['dots'],
 
     webpack: {

@@ -174,7 +174,7 @@ class Generator extends Base {
     const webpackConfigFile = this.destinationPath('webpack.config.js')
     const tree = ast(this.fs.read(webpackConfigFile), escodegenOpts)
     tree
-      .assignment('module.exports').value()
+      .var('config').value()
         .key('entry')
           .key(this.appName).value(`'./${this.config.get('contentBase')}${appDir}app.js'`)
     this.fs.write(webpackConfigFile, tree.toString())
@@ -193,9 +193,12 @@ class Generator extends Base {
       this.destinationPath(`${this.config.get('contentBase')}${appDir}routes.js`)
     )
 
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('app.js'),
-      this.destinationPath(`${this.config.get('contentBase')}${appDir}app.js`)
+      this.destinationPath(`${this.config.get('contentBase')}${appDir}app.js`),
+      {
+        appDir: appDir.replace(/\/$/, '')
+      }
     )
   }
 
