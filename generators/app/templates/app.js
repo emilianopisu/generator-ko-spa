@@ -1,8 +1,8 @@
 'use strict'
 
-const $ = require('jquery')
-const _ = require('lodash')
-const ko = require('knockout')
+const $ = window.$ = require('jquery')
+const _ = window._ = require('lodash')
+const ko = window.ko = require('knockout')
 const routes = require('./routes')
 
 require('ko-component-router')
@@ -18,7 +18,7 @@ ko.components.loaders.push({
       require.context(
         'bundle?name=[1]&regExp=<%= appDir %>/(.*)/index.js!./',
         true,
-        /\/views\/[^\/]+\/index\.js$/
+        /\.\/[^\/]+\/index\.js$/
       )(`./${name}/index.js`)(done)
     } else {
       done(null)

@@ -10,6 +10,8 @@ class <%= capitalizedName %>ViewModel {
   }
 }
 
-module.exports = createViewModel() {
-  return new TemplateViewModel(...arguments)
+module.exports = {
+  createViewModel() {
+    return new <%= capitalizedName %>ViewModel(...arguments)
+  }
 }
