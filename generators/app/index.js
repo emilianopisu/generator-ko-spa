@@ -197,7 +197,13 @@ class Generator extends Base {
       this.templatePath('app.js'),
       this.destinationPath(`${this.config.get('contentBase')}${appDir}app.js`),
       {
-        appDir: appDir.replace(/\/$/, '')
+        appDir: this.config.get('multiEntry')
+          ? appDir
+          : this.config.get('contentBase'),
+
+        basePath: this.config.get('multiEntry')
+          ? '/' + this.appName
+          : ''
       }
     )
   }
@@ -219,7 +225,8 @@ class Generator extends Base {
       'knockout-fast-foreach',
       'knockout-punches',
       'ko-component-router',
-      'lodash'
+      'lodash',
+      'es6-promise'
     ], {
       save: true
     })
