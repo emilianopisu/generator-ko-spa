@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const co = require('co')
 const ast = require('ast-query')
+const escodegenOpts = require('../../utils/escodegen-options')
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')
 
@@ -171,7 +172,7 @@ class Generator extends Base {
     }
 
     const webpackConfigFile = this.destinationPath('webpack.config.js')
-    const tree = ast(this.fs.read(webpackConfigFile))
+    const tree = ast(this.fs.read(webpackConfigFile), escodegenOpts)
     tree
       .assignment('module.exports').value()
         .key('entry')

@@ -2,6 +2,6 @@
 
 const ko = require('knockout')
 
-ko.components.register('<%= name %>', {
+module.exports = {
   template: require('./<%= name %>.html')
-})
+}

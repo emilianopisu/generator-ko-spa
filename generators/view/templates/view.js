@@ -11,5 +11,5 @@ class <%= capitalizedName %>ViewModel {
 }
 
 module.exports = createViewModel() {
-  return new TemplateViewModel(...arguments)
+  return new <%= capitalizedName %>ViewModel(...arguments)
 }

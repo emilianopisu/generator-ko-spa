@@ -4,6 +4,7 @@ const co = require('co')
 const Base = require('yeoman-generator').Base
 const yosay = require('yosay')
 const ast = require('ast-query')
+const escodegenOpts = require('../../utils/escodegen-options')
 
 class Generator extends Base {
   constructor() {
@@ -87,7 +88,7 @@ class Generator extends Base {
 
   _addPropToComponentRegistration(k, v) {
     const indexFile = this.destinationPath(`${this._getDir()}/index.js`)
-    const tree = ast(this.fs.read(indexFile))
+    const tree = ast(this.fs.read(indexFile), escodegenOpts)
 
     tree
       .callExpression('ko.components.register')

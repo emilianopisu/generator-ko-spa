@@ -6,6 +6,7 @@ const co = require('co')
 const path = require('path')
 const Base = require('yeoman-generator').Base
 const ast = require('ast-query')
+const escodegenOpts = require('../../utils/escodegen-options')
 
 class Generator extends Base {
   constructor() {
@@ -86,7 +87,7 @@ class Generator extends Base {
     )
 
     const routesFile = this.destinationPath(this._getAppDir() + 'routes.js')
-    const tree = ast(this.fs.read(routesFile))
+    const tree = ast(this.fs.read(routesFile), escodegenOpts)
     tree
       .assignment('module.exports').value()
         .key(`'${this.route}'`).value(`'${this.name}'`)
@@ -131,10 +132,10 @@ class Generator extends Base {
 
   _addPropToComponentRegistration(k, v) {
     const indexFile = this.destinationPath(`${this._getViewDir()}/index.js`)
-    const tree = ast(this.fs.read(indexFile))
+    const tree = ast(this.fs.read(indexFile), escodegenOpts)
 
     tree
-      .callExpression('ko.components.register')
+      .callExpression('module.exports')
         .arguments
         .at(1)
         .key(k)
