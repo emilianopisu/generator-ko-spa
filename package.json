@@ -32,7 +32,7 @@
     "generator-git-init": "^1.0.4",
     "generator-npm-init": "^1.2.0",
     "generator-packagejson": "^0.9.1",
-    "lodash": "^4.0.0",
+    "lodash": "^4.7.0",
     "yeoman-generator": "^0.22.2",
     "yosay": "^1.1.0"
   },
