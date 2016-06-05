@@ -3,13 +3,13 @@
 const _ = require('lodash')
 const co = require('co')
 const ast = require('ast-query')
-const { Base } = require('yeoman-generator')
+const KoSpaBaseGenerator = require('../../utils/ko-spa-base-generator')
 const codegenOpts = require('../../utils/codegen-options')
 
 const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
 const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
-class Generator extends Base {
+class Generator extends KoSpaBaseGenerator {
   constructor() {
     super(...arguments)
 
@@ -48,7 +48,7 @@ class Generator extends Base {
     const routesFileAst = ast(this.fs.read(routesFile), codegenOpts)
 
     routesFileAst
-      .assignment('module.exports').value()
+      .assignment('routes').value()
         .key(`'${this.route}'`).value(`'${this.name}'`)
     this.fs.write(routesFile, routesFileAst.toString())
 
@@ -96,39 +96,6 @@ class Generator extends Base {
         )
       }
     }
-  }
-
-  _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
-
-  _getTestEnvImport() {
-    switch (this.config.get(TEST_FRAMEWORK)) {
-      case 'mocha':
-        return this._makeImport(['expect'], 'chai')
-      case 'tape':
-        return this._makeImport('test', 'tape')
-    }
-  }
-
-  _makeImport(assignee, source) {
-    const useRequire = this.config.get(USE_REQUIRE_SYNTAX)
-    let importString = ''
-
-
-    if (assignee) {
-      importString += useRequire ? 'const ' : 'import '
-      if (_.isArray(assignee)) {
-        importString += '{ '
-        importString += assignee.join(', ')
-        importString += ' }'
-      } else {
-        importString += assignee
-      }
-      importString += useRequire ? ' = ' : ' from '
-    }
-
-    importString += useRequire ? `require('${source}')` : `'${source}'`
-
-    return importString
   }
 }
 

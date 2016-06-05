@@ -2,14 +2,14 @@
 
 const _ = require('lodash')
 const co = require('co')
-const { Base } = require('yeoman-generator')
 const yosay = require('yosay')
+const KoSpaBaseGenerator = require('../../utils/ko-spa-base-generator')
 
 const APP_NAME = 'APP_NAME'
 const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
 const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
-class Generator extends Base {
+class Generator extends KoSpaBaseGenerator {
   constructor() {
     super(...arguments)
     this.argument(APP_NAME, { required: false })
@@ -163,10 +163,6 @@ class Generator extends Base {
     this.npmInstall(dependencies, { save: true })
     this.npmInstall(devDependencies, { saveDev: true })
   }
-
-  _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
-
-  _fileExists(f) { return this.fs.exists(this.destinationPath(f)) }
 
   _initGit() {
     if (!this._fileExists('.git/HEAD')) {

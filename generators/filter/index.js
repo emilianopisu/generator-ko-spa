@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require('../../utils/ko-spa-base-generator').factory(__dirname, 'filter')
+module.exports = require('../../utils/ko-spa-verbatim-generator').factory(__dirname, 'filter')
