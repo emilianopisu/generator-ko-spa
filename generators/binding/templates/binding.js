@@ -9,3 +9,10 @@ module.exports = {
 
   }
 }
+
+<% if (COMMON_JS) { %>
+'use strict'
+
+<% } else { %>
+
+<% } %>

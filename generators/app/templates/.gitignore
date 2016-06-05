@@ -1,0 +1,6 @@
+coverage
+dist
+node_modules
+
+config/local.js
+npm-debug.json

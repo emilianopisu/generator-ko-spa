@@ -1,43 +1,58 @@
+<% if (USE_REQUIRE_SYNTAX) { -%>
 'use strict'
 
-const $ = window.$ = window.jQuery = require('jquery')
-const _ = window._ = require('lodash')
-const ko = window.ko = require('knockout')
-const routes = require('./routes')
-
-require('es6-promise').polyfill()
-
+const $ = require('jquery')
+const _ = require('lodash')
+const ko = require('knockout')
 require('ko-component-router')
 require('knockout-punches')
-ko.punches.enableAll()
 
-require('knockout-fast-foreach')
-ko.bindingHandlers.foreach = ko.bindingHandlers.fastForEach
+const routes = require('./routes')
+<% } else { -%>
+import $ from 'jquery'
+import _ from 'lodash'
+import ko from 'knockout'
+import 'ko-component-router'
+import 'knockout-punches'
+
+import routes from './routes'
+<% } -%>
+
+const components = require.context(
+  // this can not be refactored out; it is used at compile time
+  `bundle?name=[1]&regExp=(.*)/index.js!./web_modules/components/`, true, /\.\/([^\/]+)\/index\.js$/)
+
+const views = require.context(
+  `bundle?name=[1]&regExp=(.*)/index.js!./web_modules/views`, true, /\.\/([^\/]+)\/index\.js$/)
+
+function parseNames(cs) {
+  return _.map(cs.keys(), (p) => p.match(/\.\/([^\/]+)\/index\.js$/)[1])
+}
+
+// enable custom-element syntax
+// http://knockoutjs.com/documentation/component-custom-elements.html#registering-custom-elements
+_.each(_.flatMap([components, views], parseNames), (c) => ko.components.register(c, {}))
 
 ko.components.loaders.push({
   getConfig(name, done) {
-    if (_(routes).values().contains(name)) {
-      require.context(
-        'bundle?name=[1]&regExp=<%= appDir %>(.*)/index.js!./',
-        true,
-        /\.\/[^\/]+\/index\.js$/
-      )(`./${name}/index.js`)(done)
-    } else {
-      done(null)
+    const componentPath = `./${name}/index.js`
+    if (_.contains(parseNames(components), name)) {
+      components(componentPath)(done)
+    } else if (_.contains(parseNames(views), name)) {
+      views(componentPath)(done)
     }
   }
 })
+
+ko.punches.enableAll()
 
 ko.components.register('app', {
   viewModel: class App {
     constructor() {
       this.routes = routes
-      this.base = <%= basePath %>
     }
   },
-  template: `
-    <ko-component-router params="routes: routes, base: base"></ko-component-router>
-  `
+  template: '<ko-component-router params="routes: routes"></ko-component-router>'
 })
 
 $(() => ko.applyBindings())

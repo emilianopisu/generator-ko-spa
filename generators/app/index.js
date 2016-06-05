@@ -2,64 +2,26 @@
 
 const _ = require('lodash')
 const co = require('co')
-const ast = require('ast-query')
-const escodegenOpts = require('../../utils/escodegen-options')
-const Base = require('yeoman-generator').Base
+const { Base } = require('yeoman-generator')
 const yosay = require('yosay')
+
+const APP_NAME = 'APP_NAME'
+const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
+const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
 class Generator extends Base {
   constructor() {
     super(...arguments)
-    this.argument('appName', { required: false })
+    this.argument(APP_NAME, { required: false })
   }
 
   initializing() {
-    const hasPkgJson = this.fs.exists(this.destinationPath('package.json'))
-    const hasWebpackConfig = this.fs.exists(this.destinationPath('webpack.config.js'))
-
-    if (!this.fs.exists(this.destinationPath('.git/HEAD'))) {
-      this.composeWith('git-init', {}, {
-        local: require.resolve('generator-git-init/generators/app')
-      })
-    }
-    if (!hasWebpackConfig) {
-      this.composeWith('npm-init', {
-        options: {
-          'skip-name': hasPkgJson,
-          'skip-version': hasPkgJson,
-          'skip-description': hasPkgJson,
-          'skip-repo': hasPkgJson,
-          'skip-keywords': hasPkgJson,
-          'skip-author': hasPkgJson,
-          'skip-license': hasPkgJson,
-
-          'skip-test': true,
-          'skip-main': true,
-
-          'test': 'karma start'
-        }
-      }, {
-        local: require.resolve('generator-npm-init/app')
-      })
-    }
-
-    if (this.config.get('multiEntry') === false) {
-      throw new Error(`
-        This project wasn\'t set-up for multiple entry points;
-        you'll have to do some manual tweaking.
-      `)
-    }
-
-    this.config.defaults({
-      contentBase: 'client/',
-      path: 'client/dist',
-      publicPath: '/dist/'
-    })
+    this._initGit()
+    this._initNpm()
   }
 
   prompting() {
     const done = this.async()
-    const hasWebpackConfig = this.fs.exists(this.destinationPath('webpack.config.js'))
 
     this.log(yosay(`
       Hey there! Ready to get started writing kickass Knockout apps?
@@ -67,201 +29,172 @@ class Generator extends Base {
     `))
 
     co(function* () {
-      if (!hasWebpackConfig) {
-        this.config.set('contentBase', yield this._p({
-          type: 'input',
-          name: 'contentBase',
-          message: 'content base:',
-          default: 'client/'
-        }))
+      this.config.set(USE_REQUIRE_SYNTAX, yield this._p({
+        type: 'list',
+        name: USE_REQUIRE_SYNTAX,
+        message: 'module system',
+        choices: [
+          {
+            name: 'ES2015 `import/from`',
+            value: false,
+            short: 'es'
+          },
+          {
+            name: 'CommonJS `require`',
+            value: true,
+            short: 'cjs'
+          }
+        ],
+        default: false
+      }))
 
-        this.config.set('path', yield this._p({
-          type: 'input',
-          name: 'path',
-          message: 'path:',
-          default: `${this.config.get('contentBase')}dist`
-        }))
-
-        this.config.set('publicPath', yield this._p({
-          type: 'input',
-          name: 'publicPath',
-          message: 'public path:',
-          default: '/dist/'
-        }))
-      }
-
-      if (this.appName) {
-        if (this.config.get('multiEntry') !== false) {
-          this.config.set('multiEntry', true)
-        }
-      } else if (typeof this.config.get('multiEntry') === 'undefined') {
-        this.config.set('multiEntry', yield this._p({
-          type: 'confirm',
-          name: 'multiEntry',
-          message: 'multiple entry points?',
-          default: false
-        }))
-        if (this.config.get('multiEntry')) {
-          this.appName = yield this._p({
-            type: 'input',
-            name: 'appName',
-            message: 'app name:',
-            default: 'app'
-          })
-        } else {
-          this.appName = 'app'
-        }
-      }
+      this.config.set(TEST_FRAMEWORK, yield this._p({
+        type: 'list',
+        name: TEST_FRAMEWORK,
+        message: 'test framework',
+        choices: ['mocha', 'tape', 'none'],
+        default: 'mocha'
+      }))
     }.bind(this)).then(done)
   }
 
-  configuring() {
-    const dotfiles = [
+  writing() {
+    const files = [
       '.babelrc',
-      '.editorconfig',
-      '.eslintrc'
+      '.gitignore',
+      'app.js',
+      'index.html',
+      'routes.js',
+      'config/index.js',
+      'config/local.js.sample',
+      'config/server.js',
+      'config/webpack.js',
+      'Gulpfile.js/build.js',
+      'Gulpfile.js/clean.js',
+      'Gulpfile.js/index.js',
+      'Gulpfile.js/README.md',
+      'Gulpfile.js/serve.js',
+      'Gulpfile.js/test.js',
+      'Gulpfile.js/vendor.js',
+      'Gulpfile.js/watch.js',
+      'Gulpfile.js/utils/webpack.js',
+      'web_modules/bindings/.gitkeep',
+      'web_modules/components/.gitkeep',
+      'web_modules/filters/.gitkeep',
+      'web_modules/utils/.gitkeep',
+      'web_modules/views/.gitkeep'
     ]
 
-    for (const f in dotfiles) {
-      const file = dotfiles[f]
-
-      if (!this.fs.exists(this.destinationPath(file))) {
-        this.fs.copy(this.templatePath(file), this.destinationPath(file))
-      }
-    }
-  }
-
-  writing() {
-    const pkg = this.fs.readJSON(this.destinationPath('package.json'), {})
-    const appDir = this.config.get('multiEntry')
-      ? this.appName + '/'
-      : ''
-
-    _.merge(pkg, {
-      scripts: {
-        'build': 'webpack',
-        'build:prod': 'webpack -p',
-        'watch': 'webpack --watch',
-        'watch:prod': 'webpack --watch -p',
-        'serve': 'webpack-dev-server',
-        'serve:prod': 'webpack-dev-server -p',
-        'coverage': 'karma start --coverage'
-      }
-    })
-
-    this.fs.writeJSON(this.destinationPath('package.json'), pkg)
-
-    if (!this.fs.exists(this.destinationPath('webpack.config.js'))) {
-      this.fs.copyTpl(
-        this.templatePath('webpack.config.js'),
-        this.destinationPath('webpack.config.js'),
-        {
-          contentBase: this.config.get('contentBase'),
-          path: this.config.get('path'),
-          publicPath: this.config.get('publicPath')
-        })
+    if (this.config.get(TEST_FRAMEWORK) !== 'none') {
+      files.push(...[
+        'config/karma.js',
+        'Gulpfile.js/utils/karma.js'
+      ])
     }
 
-    if (!this.fs.exists(this.destinationPath('karma.conf.js'))) {
-      this.fs.copyTpl(
-        this.templatePath('karma.conf.js'),
-        this.destinationPath('karma.conf.js'),
-        {
-          contentBase: this.config.get('contentBase')
-        })
-    }
-
-    const webpackConfigFile = this.destinationPath('webpack.config.js')
-    const tree = ast(this.fs.read(webpackConfigFile), escodegenOpts)
-    tree
-      .var('config').value()
-        .key('entry')
-          .key(this.appName).value(`'./${this.config.get('contentBase')}${appDir}app.js'`)
-    this.fs.write(webpackConfigFile, tree.toString())
-
-    this.fs.copyTpl(
-      this.templatePath('index.html'),
-      this.destinationPath(`${this.config.get('contentBase')}${appDir}index.html`),
+    _.each(files, (f) => this.fs.copyTpl(
+      this.templatePath(f),
+      this.destinationPath(f),
       {
-        publicPath: this.config.get('publicPath'),
-        appName: this.appName
-      }
-    )
-
-    this.fs.copy(
-      this.templatePath('routes.js'),
-      this.destinationPath(`${this.config.get('contentBase')}${appDir}routes.js`)
-    )
-
-    this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(`${this.config.get('contentBase')}${appDir}app.js`),
-      {
-        appDir: this.config.get('multiEntry')
-          ? appDir
-          : this.config.get('contentBase'),
-
-        basePath: this.config.get('multiEntry')
-          ? '/' + this.appName
-          : ''
-      }
-    )
-  }
-
-  conflicts() {
-    // I really didn't want to have to do this... but this stops the tests from
-    // breaking on account of merge conflicts in `routes.js`
-    if ((process.env.NODE_ENV || 'development').toLowerCase().indexOf('test') > -1) {
-      const _preserve = this.conflicter.adapter.prompt
-      this.conflicter.adapter.prompt = (foo, confirm) => confirm({ action: 'force' })
-      this.conflicter.adapter.prompt.restoreDefaultPrompts = () => this.conflicter.adapter.prompt = _preserve
-    }
+        APP_NAME: this.config.get('APP_NAME'),
+        USE_REQUIRE_SYNTAX: this.config.get('USE_REQUIRE_SYNTAX'),
+        TEST_FRAMEWORK: this.config.get('TEST_FRAMEWORK')
+      }))
   }
 
   install() {
-    this.npmInstall([
+    const dependencies = [
       'jquery',
       'knockout',
-      'knockout-fast-foreach',
       'knockout-punches',
       'ko-component-router',
+      'ko-contrib-utils',
       'lodash',
       'es6-promise'
-    ], {
-      save: true
-    })
+    ]
 
-    this.npmInstall([
+    const devDependencies = [
       'babel-core',
       'babel-loader',
       'babel-plugin-transform-runtime',
       'babel-preset-es2015',
       'bundle-loader',
       'css-loader',
-      'eslint',
       'file-loader',
+      'fs-extra',
+      'gulp',
       'html-loader',
       'image-webpack-loader',
-      'isparta-loader',
-      'karma',
-      'karma-coverage',
-      'karma-tap',
-      'karma-webpack',
-      'ko-component-router',
       'node-sass',
+      'readable-stream',
       'sass-loader',
       'style-loader',
-      'tape',
       'url-loader',
       'webpack',
       'webpack-dev-server',
+      'webpack-stats-plugin',
       'yargs'
-    ], {
-      saveDev: true
-    })
+    ]
+
+    if (this.config.get(TEST_FRAMEWORK) !== 'none') {
+      devDependencies.push(...[
+        'karma',
+        'karma-coverage',
+        'karma-webpack',
+        'isparta-loader'
+      ])
+    }
+
+    switch (this.config.get(TEST_FRAMEWORK)) {
+      case 'mocha':
+        devDependencies.push(...['mocha', 'karma-mocha'])
+        break
+      case 'tape':
+        devDependencies.push(...['tape', 'karma-tap'])
+        break
+    }
+
+    if (!this.config.get(USE_REQUIRE_SYNTAX)) {
+      devDependencies.push('babel-plugin-transform-es2015-modules-commonjs')
+    }
+
+    this.npmInstall(dependencies, { save: true })
+    this.npmInstall(devDependencies, { saveDev: true })
   }
 
   _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
+
+  _fileExists(f) { return this.fs.exists(this.destinationPath(f)) }
+
+  _initGit() {
+    if (!this._fileExists('.git/HEAD')) {
+      this.composeWith('git-init', {}, {
+        local: require.resolve('generator-git-init/generators/app')
+      })
+    }
+  }
+
+  _initNpm() {
+    if (!this._fileExists('package.json')) {
+      this.composeWith('npm-init', {
+        options: {
+          scripts: {
+            test: 'gulp test',
+            start: 'gulp serve',
+            build: 'gulp build'
+          },
+          version: '0.0.1',
+          'skip-test': true,
+          'skip-version': true,
+          'skip-name': true,
+          'skip-description': true,
+          'skip-keywords': true
+        }
+      }, {
+        local: require.resolve('generator-npm-init/app')
+      })
+    }
+  }
 }
 
 module.exports = Generator
