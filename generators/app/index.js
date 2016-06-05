@@ -64,7 +64,7 @@ class Generator extends KoSpaBaseGenerator {
       '.gitignore',
       'app.js',
       'index.html',
-      'routes.js',
+      'routes.json',
       'config/index.js',
       'config/local.js.sample',
       'config/server.js',

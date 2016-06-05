@@ -2,9 +2,7 @@
 
 const _ = require('lodash')
 const co = require('co')
-const ast = require('ast-query')
 const KoSpaBaseGenerator = require('../../utils/ko-spa-base-generator')
-const codegenOpts = require('../../utils/codegen-options')
 
 const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
 const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
@@ -44,13 +42,10 @@ class Generator extends KoSpaBaseGenerator {
     const dir = `web_modules/views/${this.name}`
     const name = this.name
     const capitalizedName = (() => name[0].toUpperCase() + name.substring(1))()
-    const routesFile = this.destinationPath('routes.js')
-    const routesFileAst = ast(this.fs.read(routesFile), codegenOpts)
+    const routesFile = this.destinationPath('routes.json')
+    const routes = _.extend(this.fs.readJSON(routesFile), { [this.route]: this.name })
 
-    routesFileAst
-      .assignment('routes').value()
-        .key(`'${this.route}'`).value(`'${this.name}'`)
-    this.fs.write(routesFile, routesFileAst.toString())
+    this.fs.writeJSON(routesFile, routes)
 
     this.fs.copyTpl(
       this.templatePath('index.js'),
