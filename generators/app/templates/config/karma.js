@@ -39,6 +39,10 @@ const config = {
         jquery: path.resolve('./node_modules/jquery'),
         knockout: path.resolve('./node_modules/knockout')
       }
+    },
+    devServer: {
+      quiet: true,
+      noInfo: true
     }
   }),
 
@@ -63,6 +67,9 @@ if (coverage) {
     noAutoWrap: true
   }
 
+  if (!config.webpack.module.preLoaders) {
+  config.webpack.module.preLoaders = []
+  }
   config.webpack.module.preLoaders.push({
     test: /\.js$/,
     exclude: /(node_modules|\.test\.js$)/,

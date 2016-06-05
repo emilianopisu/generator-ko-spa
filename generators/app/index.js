@@ -126,6 +126,7 @@ class Generator extends Base {
       'gulp',
       'html-loader',
       'image-webpack-loader',
+      'ko-component-tester',
       'node-sass',
       'readable-stream',
       'sass-loader',

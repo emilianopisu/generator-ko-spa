@@ -1,22 +1,9 @@
 <% if (USE_REQUIRE_SYNTAX) { -%>
 'use strict'
-
-<% if (TEST_FRAMEWORK === 'tape') { -%>
-const test = require('tape')
-<% } else { -%>
-const { expect } = require('chai')
-<% } -%>
-const { renderHtml } = require('ko-component-tester')
-require('../<%= BINDING_NAME %>')
-<% } else { -%>
-<% if (TEST_FRAMEWORK === 'tape') { -%>
-import test from 'tape'
-<% } else { -%>
-import { expect } from 'chai'
-<% } -%>
-import { renderHtml } from 'ko-component-tester'
-import '../<%= BINDING_NAME %>'
-<% } -%>
+<% } %>
+<%- getTestEnvImport() %>
+<%- makeImport(['renderHtml'], 'ko-component-tester') %>
+<%- makeImport(null, `../${BINDING_NAME}`) %>
 
 <% if (TEST_FRAMEWORK === 'tape') { -%>
 test('bindings/<%= BINDING_NAME %>', (t) => {
