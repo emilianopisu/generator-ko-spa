@@ -1,6 +1,10 @@
+<% if (USE_REQUIRE_SYNTAX) { -%>
 'use strict'
 
 module.exports = {
+<% } else { -%>
+export default {
+<% } -%>
   init(el, valueAccessor, allBindings, DEPRECATED, bindingCtx) {
 
   },
@@ -9,10 +13,3 @@ module.exports = {
 
   }
 }
-
-<% if (COMMON_JS) { %>
-'use strict'
-
-<% } else { %>
-
-<% } %>

@@ -18,8 +18,11 @@ import 'knockout-punches'
 import routes from './routes'
 <% } -%>
 
-const components = require.context(
+const bindings = require.context(
   // this can not be refactored out; it is used at compile time
+  `./web_modules/bindings/`, true, /\.\/([^\/]+)\/index\.js$/)
+
+const components = require.context(
   `bundle?name=[1]&regExp=(.*)/index.js!./web_modules/components/`, true, /\.\/([^\/]+)\/index\.js$/)
 
 const views = require.context(
@@ -29,10 +32,12 @@ function parseNames(cs) {
   return _.map(cs.keys(), (p) => p.match(/\.\/([^\/]+)\/index\.js$/)[1])
 }
 
+// register bindings
+_.each(bindings.keys(), (b) => bindings(b))
+
 // enable custom-element syntax
 // http://knockoutjs.com/documentation/component-custom-elements.html#registering-custom-elements
 _.each(_.flatMap([components, views], parseNames), (c) => ko.components.register(c, {}))
-
 ko.components.loaders.push({
   getConfig(name, done) {
     const componentPath = `./${name}/index.js`

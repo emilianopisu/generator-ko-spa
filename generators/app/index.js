@@ -147,7 +147,7 @@ class Generator extends Base {
 
     switch (this.config.get(TEST_FRAMEWORK)) {
       case 'mocha':
-        devDependencies.push(...['mocha', 'karma-mocha'])
+        devDependencies.push(...['mocha', 'karma-mocha', 'chai'])
         break
       case 'tape':
         devDependencies.push(...['tape', 'karma-tap'])

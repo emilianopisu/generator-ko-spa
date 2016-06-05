@@ -1,8 +1,11 @@
 'use strict'
 
+const _ = require('lodash')
 const co = require('co')
 const Base = require('yeoman-generator').Base
-const yosay = require('yosay')
+
+const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
+const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
 class Generator extends Base {
   constructor() {
@@ -25,41 +28,33 @@ class Generator extends Base {
   }
 
   writing() {
-    const dir = `${this.config.get('contentBase')}web_modules/bindings/${this.name}`
-    const name = this.name
+    const dir = `web_modules/bindings/${this.name}`
 
-    this.fs.copy(
-      this.templatePath('binding.js'),
-      this.destinationPath(
-        `${dir}/${name}.js`)
-    )
+    const files = [
+      'binding.js',
+      'index.js'
+    ]
 
-    this.fs.copyTpl(
-      this.templatePath('binding.test.js'),
-      this.destinationPath(
-        `${dir}/${name}.test.js`),
-      {
-        name
-      }
-    )
+    if (this.config.get(TEST_FRAMEWORK) !== 'none') {
+      files.push('binding.test.js')
+    }
 
-    this.fs.copyTpl(
-      this.templatePath('index.js'),
-      this.destinationPath(
-        `${dir}/index.js`),
-      {
-        name
-      }
-    )
-  }
+    _.each(files, (file) => {
+      const filename = file === 'index.js'
+        ? 'index.js'
+        : this.name + file.split('binding')[1]
 
-  end() {
-    this.log(yosay(`
-      Don't forget!
-      You have to call
-      require('bindings/${this.name}')
-      before it's available to use
-    `))
+      this.fs.copyTpl(
+        this.templatePath(file),
+        this.destinationPath(
+          `${dir}/${filename}`),
+        {
+          BINDING_NAME: this.name,
+          TEST_FRAMEWORK: this.config.get(TEST_FRAMEWORK),
+          USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX)
+        }
+      )
+    })
   }
 
   _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
