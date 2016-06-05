@@ -1,19 +1,18 @@
 'use strict'
 
+const _ = require('lodash')
 const co = require('co')
 const Base = require('yeoman-generator').Base
-const yosay = require('yosay')
-const ast = require('ast-query')
-const escodegenOpts = require('../../utils/escodegen-options')
+
+const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
+const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
 class Generator extends Base {
   constructor() {
     super(...arguments)
 
     this.argument('name', { required: false })
-
     this.option('template-only')
-    this.option('synchronous')
   }
 
   prompting() {
@@ -31,7 +30,7 @@ class Generator extends Base {
   }
 
   writing() {
-    const dir = this._getDir()
+    const dir = `web_modules/components/${this.name}`
     const name = this.name
     const capitalizedName = (() => name[0].toUpperCase() + name.substring(1))()
 
@@ -39,7 +38,11 @@ class Generator extends Base {
       this.templatePath('index.js'),
       this.destinationPath(`${dir}/index.js`),
       {
-        name
+        USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+        TEMPLATE_ONLY: this.options['template-only'],
+        COMPONENT_NAME: name,
+        _getTestEnvImport: this._getTestEnvImport.bind(this),
+        _makeImport: this._makeImport.bind(this)
       }
     )
 
@@ -47,64 +50,74 @@ class Generator extends Base {
       this.templatePath('component.html'),
       this.destinationPath(`${dir}/${name}.html`),
       {
-        name
+        USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+        COMPONENT_NAME: name,
+        _getTestEnvImport: this._getTestEnvImport.bind(this),
+        _makeImport: this._makeImport.bind(this)
       }
     )
 
     if (this.options['template-only'] !== true) {
-      this._addPropToComponentRegistration('viewModel', `require('./${name}.js')`)
-
       this.fs.copyTpl(
         this.templatePath('component.js'),
         this.destinationPath(`${dir}/${name}.js`),
         {
-          capitalizedName
+          USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+          CAPITALIZED_COMPONENT_NAME: capitalizedName,
+          _getTestEnvImport: this._getTestEnvImport.bind(this),
+          _makeImport: this._makeImport.bind(this)
         }
       )
 
-      this.fs.copyTpl(
-        this.templatePath('component.test.js'),
-        this.destinationPath(`${dir}/${name}.test.js`),
-        {
-          name,
-          capitalizedName
-        }
-      )
+      if (this.config.get(TEST_FRAMEWORK) !== 'none') {
+        this.fs.copyTpl(
+          this.templatePath('component.test.js'),
+          this.destinationPath(`${dir}/${name}.test.js`),
+          {
+            USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+            TEST_FRAMEWORK: this.config.get(TEST_FRAMEWORK),
+            COMPONENT_NAME: name,
+            CAPITALIZED_COMPONENT_NAME: capitalizedName,
+            _getTestEnvImport: this._getTestEnvImport.bind(this),
+            _makeImport: this._makeImport.bind(this)
+          }
+        )
+      }
     }
-
-    if (this.options['synchronous']) {
-      this._addPropToComponentRegistration('synchronous', 'true')
-    }
-  }
-
-  end() {
-    this.log(yosay(`
-      Don't forget!
-      You have to call
-      require('components/${this.name}')
-      before it's available to use
-    `))
-  }
-
-  _addPropToComponentRegistration(k, v) {
-    const indexFile = this.destinationPath(`${this._getDir()}/index.js`)
-    const tree = ast(this.fs.read(indexFile), escodegenOpts)
-
-    tree
-      .callExpression('ko.components.register')
-        .arguments
-        .at(1)
-        .key(k)
-        .value(v)
-
-    this.fs.write(this.destinationPath(indexFile), tree.toString())
-  }
-
-  _getDir() {
-    return `${this.config.get('contentBase')}web_modules/components/${this.name}`
   }
 
   _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
+
+  _getTestEnvImport() {
+    switch (this.config.get(TEST_FRAMEWORK)) {
+      case 'mocha':
+        return this._makeImport(['expect'], 'chai')
+      case 'tape':
+        return this._makeImport('test', 'tape')
+    }
+  }
+
+  _makeImport(assignee, source) {
+    const useRequire = this.config.get(USE_REQUIRE_SYNTAX)
+    let importString = ''
+
+
+    if (assignee) {
+      importString += useRequire ? 'const ' : 'import '
+      if (_.isArray(assignee)) {
+        importString += '{ '
+        importString += assignee.join(', ')
+        importString += ' }'
+      } else {
+        importString += assignee
+      }
+      importString += useRequire ? ' = ' : ' from '
+    }
+
+    importString += useRequire ? `require('${source}')` : `'${source}'`
+
+    return importString
+  }
 }
 
 module.exports = Generator

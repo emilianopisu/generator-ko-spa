@@ -1,8 +1,10 @@
+<% if (USE_REQUIRE_SYNTAX) { -%>
 'use strict'
+<% } -%>
 
-class <%= capitalizedName %>ViewModel {
-  constructor(params, componentInfo) {
-
+class <%= CAPITALIZED_COMPONENT_NAME %> {
+  constructor(params) {
+    this.ready = ko.observable(true)
   }
 
   dispose() {
@@ -10,8 +12,8 @@ class <%= capitalizedName %>ViewModel {
   }
 }
 
-module.exports = {
-  createViewModel() {
-    return new <%= capitalizedName %>ViewModel(...arguments)
-  }
-}
+<% if (USE_REQUIRE_SYNTAX) { -%>
+export default <%= CAPITALIZED_COMPONENT_NAME %>
+<% } else { -%>
+module.exports = <%= CAPITALIZED_COMPONENT_NAME %>
+<% } -%>
