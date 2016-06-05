@@ -80,6 +80,7 @@ class Generator extends Base {
       'Gulpfile.js/utils/webpack.js',
       'web_modules/bindings/.gitkeep',
       'web_modules/components/.gitkeep',
+      'web_modules/extenders/.gitkeep',
       'web_modules/filters/.gitkeep',
       'web_modules/utils/.gitkeep',
       'web_modules/views/.gitkeep'

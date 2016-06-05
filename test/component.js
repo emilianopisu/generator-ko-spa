@@ -8,19 +8,19 @@
 //
 //   assert
 //     .file([
-//       'client/web_modules/components/foo/index.js',
-//       'client/web_modules/components/foo/foo.js',
-//       'client/web_modules/components/foo/foo.html',
-//       'client/web_modules/components/foo/foo.test.js'
+//       'web_modules/components/foo/index.js',
+//       'web_modules/components/foo/foo.js',
+//       'web_modules/components/foo/foo.html',
+//       'web_modules/components/foo/foo.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/web_modules/components/foo/index.js', 'template: require(\'./foo.html\')'],
-//       ['client/web_modules/components/foo/index.js', 'viewModel: require(\'./foo.js\')'],
-//       ['client/web_modules/components/foo/foo.html', 'foo'],
-//       ['client/web_modules/components/foo/foo.js', 'FooViewModel'],
-//       ['client/web_modules/components/foo/foo.test.js', 'test(\'components/foo\'']
+//       ['web_modules/components/foo/index.js', 'template: require(\'./foo.html\')'],
+//       ['web_modules/components/foo/index.js', 'viewModel: require(\'./foo.js\')'],
+//       ['web_modules/components/foo/foo.html', 'foo'],
+//       ['web_modules/components/foo/foo.js', 'FooViewModel'],
+//       ['web_modules/components/foo/foo.test.js', 'test(\'components/foo\'']
 //     ])
 // })
 //
@@ -29,19 +29,19 @@
 //
 //   assert
 //     .file([
-//       'client/web_modules/components/foo/index.js',
-//       'client/web_modules/components/foo/foo.js',
-//       'client/web_modules/components/foo/foo.html',
-//       'client/web_modules/components/foo/foo.test.js'
+//       'web_modules/components/foo/index.js',
+//       'web_modules/components/foo/foo.js',
+//       'web_modules/components/foo/foo.html',
+//       'web_modules/components/foo/foo.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/web_modules/components/foo/index.js', 'template: require(\'./foo.html\')'],
-//       ['client/web_modules/components/foo/index.js', 'viewModel: require(\'./foo.js\')'],
-//       ['client/web_modules/components/foo/foo.html', 'foo'],
-//       ['client/web_modules/components/foo/foo.js', 'FooViewModel'],
-//       ['client/web_modules/components/foo/foo.test.js', 'test(\'components/foo\'']
+//       ['web_modules/components/foo/index.js', 'template: require(\'./foo.html\')'],
+//       ['web_modules/components/foo/index.js', 'viewModel: require(\'./foo.js\')'],
+//       ['web_modules/components/foo/foo.html', 'foo'],
+//       ['web_modules/components/foo/foo.js', 'FooViewModel'],
+//       ['web_modules/components/foo/foo.test.js', 'test(\'components/foo\'']
 //     ])
 // })
 //
@@ -50,13 +50,13 @@
 //
 //   assert
 //     .noFile([
-//       'client/web_modules/components/foo/foo.js',
-//       'client/web_modules/components/foo/foo.test.js'
+//       'web_modules/components/foo/foo.js',
+//       'web_modules/components/foo/foo.test.js'
 //     ])
 //
 //   assert
 //     .noFileContent([
-//       ['client/web_modules/components/foo/index.js', 'viewModel']
+//       ['web_modules/components/foo/index.js', 'viewModel']
 //     ])
 // })
 //
@@ -65,6 +65,6 @@
 //
 //   assert
 //     .fileContent([
-//       ['client/web_modules/components/foo/index.js', 'synchronous: true']
+//       ['web_modules/components/foo/index.js', 'synchronous: true']
 //     ])
 // })

@@ -7,6 +7,7 @@ const test = require('tape')
 const { expect } = require('chai')
 <% } -%>
 const { renderHtml } = require('ko-component-tester')
+require('../<%= BINDING_NAME %>')
 <% } else { -%>
 <% if (TEST_FRAMEWORK === 'tape') { -%>
 import test from 'tape'
@@ -14,6 +15,7 @@ import test from 'tape'
 import { expect } from 'chai'
 <% } -%>
 import { renderHtml } from 'ko-component-tester'
+import '../<%= BINDING_NAME %>'
 <% } -%>
 
 <% if (TEST_FRAMEWORK === 'tape') { -%>

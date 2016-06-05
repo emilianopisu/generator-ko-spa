@@ -1,11 +1,9 @@
+<% if (USE_REQUIRE_SYNTAX) { -%>
 'use strict'
 
-module.exports = {
-  init(el, valueAccessor, allBindings, DEPRECATED, bindingCtx) {
-
-  },
-
-  update(el, valueAccessor, allBindings, DEPRECATED, bindingCtx) {
-
-  }
+module.exports = function(obs, config) {
+<% } else { -%>
+export default function(obs, config) {
+<% } -%>
+  return obs
 }

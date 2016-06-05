@@ -8,20 +8,20 @@
 //
 //   assert
 //     .file([
-//       'client/bar/index.js',
-//       'client/bar/bar.html',
-//       'client/bar/bar.js',
-//       'client/bar/bar.test.js'
+//       'bar/index.js',
+//       'bar/bar.html',
+//       'bar/bar.js',
+//       'bar/bar.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/routes.js', '\'/foo/bar\': \'bar\''],
-//       ['client/bar/index.js', 'template: require(\'./bar.html\')'],
-//       ['client/bar/index.js', 'viewModel: require(\'./bar.js\')'],
-//       ['client/bar/bar.html', 'bar'],
-//       ['client/bar/bar.js', 'BarViewModel'],
-//       ['client/bar/bar.test.js', 'test(\'bar\'']
+//       ['routes.js', '\'/foo/bar\': \'bar\''],
+//       ['bar/index.js', 'template: require(\'./bar.html\')'],
+//       ['bar/index.js', 'viewModel: require(\'./bar.js\')'],
+//       ['bar/bar.html', 'bar'],
+//       ['bar/bar.js', 'BarViewModel'],
+//       ['bar/bar.test.js', 'test(\'bar\'']
 //     ])
 // })
 //
@@ -34,20 +34,20 @@
 //
 //   assert
 //     .file([
-//       'client/bar/index.js',
-//       'client/bar/bar.html',
-//       'client/bar/bar.js',
-//       'client/bar/bar.test.js'
+//       'bar/index.js',
+//       'bar/bar.html',
+//       'bar/bar.js',
+//       'bar/bar.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/routes.js', '\'/foo/bar\': \'bar\''],
-//       ['client/bar/index.js', 'template: require(\'./bar.html\')'],
-//       ['client/bar/index.js', 'viewModel: require(\'./bar.js\')'],
-//       ['client/bar/bar.html', 'bar'],
-//       ['client/bar/bar.js', 'BarViewModel'],
-//       ['client/bar/bar.test.js', 'test(\'bar\'']
+//       ['routes.js', '\'/foo/bar\': \'bar\''],
+//       ['bar/index.js', 'template: require(\'./bar.html\')'],
+//       ['bar/index.js', 'viewModel: require(\'./bar.js\')'],
+//       ['bar/bar.html', 'bar'],
+//       ['bar/bar.js', 'BarViewModel'],
+//       ['bar/bar.test.js', 'test(\'bar\'']
 //     ])
 // })
 //
@@ -58,20 +58,20 @@
 //
 //   assert
 //     .file([
-//       'client/qux/bar/index.js',
-//       'client/qux/bar/bar.html',
-//       'client/qux/bar/bar.js',
-//       'client/qux/bar/bar.test.js'
+//       'qux/bar/index.js',
+//       'qux/bar/bar.html',
+//       'qux/bar/bar.js',
+//       'qux/bar/bar.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/qux/routes.js', '\'/foo/bar\': \'bar\''],
-//       ['client/qux/bar/index.js', 'template: require(\'./bar.html\')'],
-//       ['client/qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
-//       ['client/qux/bar/bar.html', 'bar'],
-//       ['client/qux/bar/bar.js', 'BarViewModel'],
-//       ['client/qux/bar/bar.test.js', 'test(\'qux/bar\'']
+//       ['qux/routes.js', '\'/foo/bar\': \'bar\''],
+//       ['qux/bar/index.js', 'template: require(\'./bar.html\')'],
+//       ['qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
+//       ['qux/bar/bar.html', 'bar'],
+//       ['qux/bar/bar.js', 'BarViewModel'],
+//       ['qux/bar/bar.test.js', 'test(\'qux/bar\'']
 //     ])
 // })
 //
@@ -81,20 +81,20 @@
 //
 //   assert
 //     .file([
-//       'client/qux/bar/index.js',
-//       'client/qux/bar/bar.html',
-//       'client/qux/bar/bar.js',
-//       'client/qux/bar/bar.test.js'
+//       'qux/bar/index.js',
+//       'qux/bar/bar.html',
+//       'qux/bar/bar.js',
+//       'qux/bar/bar.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/qux/routes.js', '\'/foo/bar\': \'bar\''],
-//       ['client/qux/bar/index.js', 'template: require(\'./bar.html\')'],
-//       ['client/qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
-//       ['client/qux/bar/bar.html', 'bar'],
-//       ['client/qux/bar/bar.js', 'BarViewModel'],
-//       ['client/qux/bar/bar.test.js', 'test(\'qux/bar\'']
+//       ['qux/routes.js', '\'/foo/bar\': \'bar\''],
+//       ['qux/bar/index.js', 'template: require(\'./bar.html\')'],
+//       ['qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
+//       ['qux/bar/bar.html', 'bar'],
+//       ['qux/bar/bar.js', 'BarViewModel'],
+//       ['qux/bar/bar.test.js', 'test(\'qux/bar\'']
 //     ])
 // })
 //
@@ -109,20 +109,20 @@
 //
 //   assert
 //     .file([
-//       'client/qux/bar/index.js',
-//       'client/qux/bar/bar.html',
-//       'client/qux/bar/bar.js',
-//       'client/qux/bar/bar.test.js'
+//       'qux/bar/index.js',
+//       'qux/bar/bar.html',
+//       'qux/bar/bar.js',
+//       'qux/bar/bar.test.js'
 //     ])
 //
 //   assert
 //     .fileContent([
-//       ['client/qux/routes.js', '\'/foo/bar\': \'bar\''],
-//       ['client/qux/bar/index.js', 'template: require(\'./bar.html\')'],
-//       ['client/qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
-//       ['client/qux/bar/bar.html', 'bar'],
-//       ['client/qux/bar/bar.js', 'BarViewModel'],
-//       ['client/qux/bar/bar.test.js', 'test(\'qux/bar\'']
+//       ['qux/routes.js', '\'/foo/bar\': \'bar\''],
+//       ['qux/bar/index.js', 'template: require(\'./bar.html\')'],
+//       ['qux/bar/index.js', 'viewModel: require(\'./bar.js\')'],
+//       ['qux/bar/bar.html', 'bar'],
+//       ['qux/bar/bar.js', 'BarViewModel'],
+//       ['qux/bar/bar.test.js', 'test(\'qux/bar\'']
 //     ])
 // })
 //
@@ -133,13 +133,13 @@
 //
 //   assert
 //     .noFile([
-//       'client/foo/foo.js',
-//       'client/foo/foo.test.js'
+//       'foo/foo.js',
+//       'foo/foo.test.js'
 //     ])
 //
 //   assert
 //     .noFileContent([
-//       ['client/foo/index.js', 'viewModel']
+//       ['foo/index.js', 'viewModel']
 //     ])
 // })
 //
@@ -149,6 +149,6 @@
 //
 //   assert
 //     .fileContent([
-//       ['client/foo/index.js', 'synchronous: true']
+//       ['foo/index.js', 'synchronous: true']
 //     ])
 // })
