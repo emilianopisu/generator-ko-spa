@@ -41,7 +41,6 @@ class Generator extends Base {
         USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
         TEMPLATE_ONLY: this.options['template-only'],
         COMPONENT_NAME: name,
-        _getTestEnvImport: this._getTestEnvImport.bind(this),
         _makeImport: this._makeImport.bind(this)
       }
     )
@@ -50,10 +49,7 @@ class Generator extends Base {
       this.templatePath('component.html'),
       this.destinationPath(`${dir}/${name}.html`),
       {
-        USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
-        COMPONENT_NAME: name,
-        _getTestEnvImport: this._getTestEnvImport.bind(this),
-        _makeImport: this._makeImport.bind(this)
+        COMPONENT_NAME: name
       }
     )
 
@@ -63,9 +59,7 @@ class Generator extends Base {
         this.destinationPath(`${dir}/${name}.js`),
         {
           USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
-          CAPITALIZED_COMPONENT_NAME: capitalizedName,
-          _getTestEnvImport: this._getTestEnvImport.bind(this),
-          _makeImport: this._makeImport.bind(this)
+          CAPITALIZED_COMPONENT_NAME: capitalizedName
         }
       )
 
@@ -77,7 +71,6 @@ class Generator extends Base {
             USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
             TEST_FRAMEWORK: this.config.get(TEST_FRAMEWORK),
             COMPONENT_NAME: name,
-            CAPITALIZED_COMPONENT_NAME: capitalizedName,
             _getTestEnvImport: this._getTestEnvImport.bind(this),
             _makeImport: this._makeImport.bind(this)
           }

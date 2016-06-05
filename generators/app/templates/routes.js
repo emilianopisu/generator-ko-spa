@@ -1,7 +1,11 @@
 <% if (USE_REQUIRE_SYNTAX) { %>
 'use strict'
 
-module.exports = {}
+const routes = {}
+
+module.exports = routes
 <% } else { %>
-export default {}
+const routes = {}
+
+export default routes
 <% } %>

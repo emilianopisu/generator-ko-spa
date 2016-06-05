@@ -46,7 +46,7 @@ describe('components/<%= COMPONENT_NAME -%>', () => {
       }),
       bindingCtx)
 
-    return $el.waitForProperty('fullyLoaded', true)
+    return $el.waitForProperty('ready', true)
   })
   after(() => {
     $el.dispose()

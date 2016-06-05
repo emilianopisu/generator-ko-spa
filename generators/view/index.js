@@ -1,50 +1,27 @@
 'use strict'
 
 const _ = require('lodash')
-const fs = require('fs')
 const co = require('co')
-const path = require('path')
-const Base = require('yeoman-generator').Base
 const ast = require('ast-query')
-const escodegenOpts = require('../../utils/escodegen-options')
+const { Base } = require('yeoman-generator')
+const codegenOpts = require('../../utils/codegen-options')
+
+const USE_REQUIRE_SYNTAX = 'USE_REQUIRE_SYNTAX'
+const TEST_FRAMEWORK = 'TEST_FRAMEWORK'
 
 class Generator extends Base {
   constructor() {
     super(...arguments)
 
-    this.entries = (() => {
-      const dist = this.destinationPath(this.config.get('contentBase'))
-      return _.filter(fs.readdirSync(dist), (file) =>
-        file !== 'web_modules' && fs.statSync(path.join(dist, file)).isDirectory())
-    })()
-
-    if (this.config.get('multiEntry') && this.entries.length > 1) {
-      this.argument('entry', { required: false })
-    }
     this.argument('name', { required: false })
     this.argument('route', { required: false })
-
     this.option('template-only')
-    this.option('synchronous')
   }
 
   prompting() {
     const done = this.async()
 
     co(function* () {
-      if (this.config.get('multiEntry') && !this.entry) {
-        if (this.entries.length > 1) {
-          this.entry = yield this._p({
-            type: 'list',
-            name: 'entry',
-            message: 'sub app:',
-            choices: this.entries
-          })
-        } else {
-          this.entry = this.entries[0]
-        }
-      }
-
       if (!this.name) {
         this.name = yield this._p({
           type: 'input',
@@ -57,23 +34,32 @@ class Generator extends Base {
         this.route = yield this._p({
           type: 'input',
           name: 'route',
-          message: 'route:',
-          default: '/' + this.name
+          message: 'route:'
         })
       }
     }.bind(this)).then(done)
   }
 
   writing() {
-    const dir = this._getViewDir()
+    const dir = `web_modules/views/${this.name}`
     const name = this.name
     const capitalizedName = (() => name[0].toUpperCase() + name.substring(1))()
+    const routesFile = this.destinationPath('routes.js')
+    const routesFileAst = ast(this.fs.read(routesFile), codegenOpts)
+
+    routesFileAst
+      .assignment('module.exports').value()
+        .key(`'${this.route}'`).value(`'${this.name}'`)
+    this.fs.write(routesFile, routesFileAst.toString())
 
     this.fs.copyTpl(
       this.templatePath('index.js'),
       this.destinationPath(`${dir}/index.js`),
       {
-        name
+        USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+        TEMPLATE_ONLY: this.options['template-only'],
+        VIEW_NAME: name,
+        _makeImport: this._makeImport.bind(this)
       }
     )
 
@@ -81,78 +67,69 @@ class Generator extends Base {
       this.templatePath('view.html'),
       this.destinationPath(`${dir}/${name}.html`),
       {
-        name,
-        appname: this.entry ? this.entry + '/' : ''
+        ROUTE: this.route
       }
     )
 
-    const routesFile = this.destinationPath(this._getAppDir() + 'routes.js')
-    const tree = ast(this.fs.read(routesFile), escodegenOpts)
-    tree
-      .assignment('module.exports').value()
-        .key(`'${this.route}'`).value(`'${this.name}'`)
-    this.fs.write(routesFile, tree.toString())
-
     if (this.options['template-only'] !== true) {
-      this._addPropToComponentRegistration('viewModel', `require('./${name}.js')`)
-
       this.fs.copyTpl(
         this.templatePath('view.js'),
         this.destinationPath(`${dir}/${name}.js`),
         {
-          capitalizedName
+          USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+          CAPITALIZED_VIEW_NAME: capitalizedName
         }
       )
 
-      this.fs.copyTpl(
-        this.templatePath('view.test.js'),
-        this.destinationPath(`${dir}/${name}.test.js`),
-        {
-          name,
-          capitalizedName,
-          appname: this.entry ? this.entry + '/' : ''
-        }
-      )
+      if (this.config.get(TEST_FRAMEWORK) !== 'none') {
+        this.fs.copyTpl(
+          this.templatePath('view.test.js'),
+          this.destinationPath(`${dir}/${name}.test.js`),
+          {
+            USE_REQUIRE_SYNTAX: this.config.get(USE_REQUIRE_SYNTAX),
+            TEST_FRAMEWORK: this.config.get(TEST_FRAMEWORK),
+            VIEW_NAME: name,
+            ROUTE: this.route,
+            _getTestEnvImport: this._getTestEnvImport.bind(this),
+            _makeImport: this._makeImport.bind(this)
+          }
+        )
+      }
     }
-
-    if (this.options['synchronous']) {
-      this._addPropToComponentRegistration('synchronous', 'true')
-    }
-  }
-
-  conflicts() {
-    // I really didn't want to have to do this... but this stops the tests from
-    // breaking on account of merge conflicts in `routes.js`
-    if ((process.env.NODE_ENV || 'development').toLowerCase().indexOf('test') > -1) {
-      const _preserve = this.conflicter.adapter.prompt
-      this.conflicter.adapter.prompt = (foo, confirm) => confirm({ action: 'force' })
-      this.conflicter.adapter.prompt.restoreDefaultPrompts = () => this.conflicter.adapter.prompt = _preserve
-    }
-  }
-
-  _addPropToComponentRegistration(k, v) {
-    const indexFile = this.destinationPath(`${this._getViewDir()}/index.js`)
-    const tree = ast(this.fs.read(indexFile), escodegenOpts)
-
-    tree
-      .assignment('module.exports').value()
-        .key(k).value(v)
-
-    this.fs.write(this.destinationPath(indexFile), tree.toString())
-  }
-
-  _getAppDir() {
-    const subdir = this.config.get('multiEntry')
-      ? this.entry + '/'
-      : ''
-    return this.config.get('contentBase') + subdir
-  }
-
-  _getViewDir() {
-    return this._getAppDir() + this.name
   }
 
   _p(o) { return new Promise((r) => this.prompt(o, (a) => r(a[o.name]))) }
+
+  _getTestEnvImport() {
+    switch (this.config.get(TEST_FRAMEWORK)) {
+      case 'mocha':
+        return this._makeImport(['expect'], 'chai')
+      case 'tape':
+        return this._makeImport('test', 'tape')
+    }
+  }
+
+  _makeImport(assignee, source) {
+    const useRequire = this.config.get(USE_REQUIRE_SYNTAX)
+    let importString = ''
+
+
+    if (assignee) {
+      importString += useRequire ? 'const ' : 'import '
+      if (_.isArray(assignee)) {
+        importString += '{ '
+        importString += assignee.join(', ')
+        importString += ' }'
+      } else {
+        importString += assignee
+      }
+      importString += useRequire ? ' = ' : ' from '
+    }
+
+    importString += useRequire ? `require('${source}')` : `'${source}'`
+
+    return importString
+  }
 }
 
 module.exports = Generator
