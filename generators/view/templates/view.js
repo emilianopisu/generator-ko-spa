@@ -13,7 +13,7 @@ class <%= CAPITALIZED_VIEW_NAME %> {
 }
 
 <% if (USE_REQUIRE_SYNTAX) { -%>
-export default <%= CAPITALIZED_VIEW_NAME %>
-<% } else { -%>
 module.exports = <%= CAPITALIZED_VIEW_NAME %>
+<% } else { -%>  
+export default <%= CAPITALIZED_VIEW_NAME %>
 <% } -%>

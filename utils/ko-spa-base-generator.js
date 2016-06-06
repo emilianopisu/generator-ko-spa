@@ -11,7 +11,6 @@ class KoSpaBaseGenerator extends Base {
     super(...arguments)
 
     this.config.defaults({
-      [USE_REQUIRE_SYNTAX]: false,
       [TEST_FRAMEWORK]: 'mocha'
     })
   }

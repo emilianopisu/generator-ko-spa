@@ -32,17 +32,17 @@ class Generator extends KoSpaBaseGenerator {
       this.config.set(USE_REQUIRE_SYNTAX, yield this._p({
         type: 'list',
         name: USE_REQUIRE_SYNTAX,
-        message: 'module system',
+        message: 'Which module system should be used?',
         choices: [
           {
             name: 'ES2015 `import/from`',
             value: false,
-            short: 'es'
+            short: 'es2015'
           },
           {
             name: 'CommonJS `require`',
             value: true,
-            short: 'cjs'
+            short: 'commonjs'
           }
         ],
         default: false
@@ -185,6 +185,7 @@ class Generator extends KoSpaBaseGenerator {
           'skip-test': true,
           'skip-version': true,
           'skip-name': true,
+          'skip-main': true,
           'skip-description': true,
           'skip-keywords': true
         }

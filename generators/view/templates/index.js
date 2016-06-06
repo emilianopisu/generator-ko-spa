@@ -2,9 +2,9 @@
 'use strict'
 <% } %>
 <%- _makeImport('template', `./${VIEW_NAME}.html`) %>
-<% if (!TEMPLATE_ONLY) { %>
+<% if (!TEMPLATE_ONLY) { -%>
 <%- _makeImport('viewModel', `./${VIEW_NAME}`) %>
-<% } %>
+<% } -%>
 
 <% if (USE_REQUIRE_SYNTAX) { -%>
 <% if (TEMPLATE_ONLY) { %>
