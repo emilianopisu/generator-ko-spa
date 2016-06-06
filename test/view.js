@@ -7,6 +7,9 @@ test('generator-ko-spa:view', async () => {
   await runGenerator('view', { args: ['foo', '/foo'] })
 
   assertFilesAndContent({
+    'routes.json': [
+      '"/foo": "foo"'
+    ],
     'web_modules/views/foo/index.js': [
       '\'./foo.html\'',
       '\'./foo\''
@@ -31,6 +34,9 @@ test('generator-ko-spa:view', async () => {
   })
 
   assertFilesAndContent({
+    'routes.json': [
+      '"/bar": "bar"'
+    ],
     'web_modules/views/bar/index.js': [
       '\'./bar.html\'',
       '\'./bar\''
