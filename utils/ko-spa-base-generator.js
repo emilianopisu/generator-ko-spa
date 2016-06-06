@@ -32,9 +32,12 @@ class KoSpaBaseGenerator extends Base {
     const useRequire = this.config.get(USE_REQUIRE_SYNTAX)
     let importString = ''
 
+    if (!useRequire) {
+      importString += 'import '
+    }
 
     if (assignee) {
-      importString += useRequire ? 'const ' : 'import '
+      importString += useRequire ? 'const ' : ''
       if (_.isArray(assignee)) {
         importString += '{ '
         importString += assignee.join(', ')
