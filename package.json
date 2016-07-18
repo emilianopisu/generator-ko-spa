@@ -30,7 +30,7 @@
     "chalk": "^1.1.1",
     "co": "^4.6.0",
     "generator-git-init": "^1.0.4",
-    "generator-npm-init": "^1.2.0",
+    "generator-npm-init": "^1.2.2",
     "generator-packagejson": "^0.9.1",
     "lodash": "^4.0.0",
     "yeoman-generator": "^0.24.1",
