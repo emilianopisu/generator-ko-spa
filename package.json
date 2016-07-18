@@ -26,7 +26,7 @@
     "test": "export NODE_ENV=test; nyc --reporter=lcov --reporter=html ava --verbose --serial"
   },
   "dependencies": {
-    "ast-query": "^1.1.0",
+    "ast-query": "^2.0.0",
     "chalk": "^1.1.1",
     "co": "^4.6.0",
     "generator-git-init": "^1.0.4",
