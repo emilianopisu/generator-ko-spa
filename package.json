@@ -34,7 +34,7 @@
     "generator-packagejson": "^0.9.1",
     "lodash": "^4.0.0",
     "yeoman-generator": "^0.24.1",
-    "yosay": "^1.1.0"
+    "yosay": "^1.2.1"
   },
   "devDependencies": {
     "ava": "^0.15.0",
