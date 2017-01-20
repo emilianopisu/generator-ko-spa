@@ -1,5 +1,7 @@
 # generator-ko-spa
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/caseyWebb/generator-ko-spa.svg)](https://greenkeeper.io/)
+
 ![NPM](https://img.shields.io/npm/v/generator-ko-spa.svg)
 ![MIT](https://img.shields.io/npm/l/generator-ko-spa.svg)
 [![Travis](https://img.shields.io/travis/caseyWebb/generator-ko-spa.svg)](https://travis-ci.org/caseyWebb/generator-ko-spa)
